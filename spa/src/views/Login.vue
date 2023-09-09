@@ -52,8 +52,8 @@ export default class Login extends Vue {
   isValid = false;
   isLoading = false;
 
-  username = "";
-  password = "";
+  username = "admin@dev-web.com";
+  password = "devweb123";
 
   reset() {
     this.username = "";

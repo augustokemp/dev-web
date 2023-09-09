@@ -8,7 +8,7 @@ RUN npm install -g npm@7
 
 RUN npm install
 
-RUN npm install -g @vue/cli
+# RUN npm install -g @vue/cli
 
 COPY ./ /app/
 
