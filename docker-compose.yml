@@ -29,6 +29,8 @@ services:
       context: ./spa
       args:
         FRONTEND_ENV: ${FRONTEND_ENV}
+    environment:
+      - NODE_ENV=development
     command: npm run serve # -- --public 0.0.0.0:8080
     networks:
       dev-network:
