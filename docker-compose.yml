@@ -36,6 +36,34 @@ services:
       dev-network:
           ipv4_address: 172.29.0.5
 
+
+  db:
+    image: postgres:14
+    command: postgres -c 'max_connections=200' -c 'shared_buffers=1GB' -c 'effective_cache_size=3GB' -c 'maintenance_work_mem=256MB' -c 'checkpoint_completion_target=0.9' -c 'wal_buffers=16MB' -c 'default_statistics_target=100' -c 'random_page_cost=4' -c 'effective_io_concurrency=2' -c 'work_mem=2621kB' -c 'min_wal_size=1GB' -c 'max_wal_size=4GB' -c 'idle_in_transaction_session_timeout=5min' -c 'statement_timeout=5min'
+    tty: true
+    shm_size: 128m
+    volumes:
+      - app-db-data:/var/lib/postgresql/data/pgdata
+      - type: tmpfs
+        target: /dev/shm
+        tmpfs:
+           size: 200m
+    env_file:
+      - .env
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+    build:
+      context: ./db
+    ports:
+      - "5433:5432"
+    networks:
+      dev-network:
+          ipv4_address: 172.29.0.7
+
+volumes:
+  app-db-data:
+
 networks:
   dev-network:
     driver: bridge
