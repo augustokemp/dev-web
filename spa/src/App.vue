@@ -57,4 +57,8 @@ export default class App extends Vue {
 ::v-deep .blink {
   animation: blink 0.5s infinite alternate;
 }
+
+#app {
+  background-color: rgba(0, 0, 0, 0.04);
+}
 </style>

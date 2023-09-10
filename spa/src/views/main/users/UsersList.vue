@@ -1,13 +1,10 @@
 <template>
-  <TemplateCard :title="`Olá, ${currentUser.full_name}.`">
-    Esta é a Home
-  </TemplateCard>
+  <TemplateCard title="Usuários"> aaa </TemplateCard>
 </template>
 
 <script lang="ts">
 import Component from "vue-class-component";
 import Vue from "vue";
-import { mainStore } from "@/store";
 import TemplateCard from "@/components/TemplateCard.vue";
 
 @Component({
@@ -15,12 +12,7 @@ import TemplateCard from "@/components/TemplateCard.vue";
     TemplateCard,
   },
 })
-export default class Home extends Vue {
-  get currentUser() {
-    return mainStore.userProfile!;
-  }
-  mounted() {}
-}
+export default class UsersList extends Vue {}
 </script>
 
 <style>

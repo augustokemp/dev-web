@@ -2,7 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 // import { component } from "vue/types/umd";
 
-// import RouterComponent from "../components/RouterComponent.vue";
+import RouterComponent from "../components/RouterComponent.vue";
 
 Vue.use(Router);
 
@@ -15,18 +15,16 @@ export default new Router({
   routes: [
     {
       path: "/",
-      name: "Start",
       component: () => import("../views/main/Start.vue"),
       children: [
         {
           path: "login",
-          name: "login",
           component: () => import("../views/Login.vue"),
         },
         {
           path: "main",
           component: () => import("../views/main/Main.vue"),
-          redirect: "main/home",
+          redirect: "/main/home",
           children: [
             {
               path: "home",
@@ -34,7 +32,13 @@ export default new Router({
             },
             {
               path: "users",
-              component: () => import("../views/main/Users.vue"),
+              component: RouterComponent,
+              children: [
+                {
+                  path: "/",
+                  component: () => import("../views/main/users/UsersList.vue"),
+                },
+              ],
             },
           ],
         },
