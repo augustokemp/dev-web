@@ -15,6 +15,4 @@ class UserAddress(Base):
         return v
 
     user_id = Column(ForeignKey("user.id"), nullable=False, index=True)
-    user = relationship("User", backref="user_address")
     address_id = Column(ForeignKey("address.id"), nullable=False, index=True)
-    address = relationship("Address", backref="user_address")

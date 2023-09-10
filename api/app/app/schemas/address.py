@@ -34,3 +34,10 @@ class AddressInDBBase(AddressBase):
 
     class Config:
         orm_mode = True
+
+
+class Address(AddressBase):
+    id: int
+
+    class Config:
+        orm_mode = True

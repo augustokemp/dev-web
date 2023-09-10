@@ -1,8 +1,8 @@
-from typing import Optional
-from datetime import date, datetime
+from datetime import datetime
+from typing import List, Optional
 
+from app.schemas.address import Address
 from pydantic import BaseModel, EmailStr
-from app import models
 
 
 # Shared properties
@@ -37,6 +37,7 @@ class UserInDBBase(UserBase):
 # Additional properties to return via API
 class User(UserInDBBase):
     id: int
+    addresses: List[Address]
 
     class Config:
         arbitrary_types_allowed = True

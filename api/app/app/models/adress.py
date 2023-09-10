@@ -17,3 +17,5 @@ class Address(Base):
     neighborhood = Column(String, nullable=False, index=False)
     city = Column(String, nullable=False, index=False)
     uf = Column(String, nullable=False, index=False)
+
+    users = relationship("User", secondary="user_address", back_populates="addresses")

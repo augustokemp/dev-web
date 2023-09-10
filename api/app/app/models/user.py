@@ -17,3 +17,5 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)
     is_admin = Column(Boolean, default=False)
+
+    addresses = relationship("Address", secondary="user_address", back_populates="users")
