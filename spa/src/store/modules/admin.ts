@@ -12,7 +12,7 @@ export default class AdminModule extends VuexModule {
   public user: IUserProfile = {
     email: "",
     is_active: true,
-    is_superuser: false,
+    is_admin: false,
     full_name: "",
     id: 0,
   };

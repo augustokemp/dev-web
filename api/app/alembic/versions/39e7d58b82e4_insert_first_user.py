@@ -20,8 +20,8 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
     op.execute("""
-        INSERT INTO "user"(email, full_name, hashed_password, is_active)
-        VALUES ('admin@dev-web.com', 'ADMIN', '%s', TRUE)
+        INSERT INTO "user"(email, full_name, hashed_password, is_active, is_admin)
+        VALUES ('admin@dev-web.com', 'ADMIN', '%s', TRUE, TRUE)
     """ % get_password_hash("devweb123"))
 
 
