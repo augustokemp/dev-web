@@ -10,7 +10,7 @@ const startRouteGuard = async (to, _from, next) => {
   await mainStore.checkLoggedIn();
   if (mainStore.isLoggedIn) {
     if (to.path === "/login" || to.path === "/") {
-      next("/main");
+      next("/main/home");
     } else {
       next();
     }

@@ -1,19 +1,18 @@
 <template>
   <v-container fluid>
-    Home
-  </v-container>
+    <v-icon>mdi-eye</v-icon>
+    </v-container>
 </template>
 
 <script lang="ts">
-import Component from 'vue-class-component'
-import Vue from 'vue';
+import Component from "vue-class-component";
+import Vue from "vue";
 
 @Component
 export default class Home extends Vue {
-
+  mounted() {}
 }
 </script>
 
 <style>
-
 </style>

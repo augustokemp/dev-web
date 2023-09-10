@@ -29,7 +29,7 @@ export default class MainModule extends VuexModule {
   get hasAdminAccess() {
     return (
       this.userProfile &&
-      this.userProfile.is_superuser &&
+      this.userProfile.is_admin &&
       this.userProfile.is_active
     );
   }
@@ -213,7 +213,7 @@ export default class MainModule extends VuexModule {
 
     if (payload.request) {
       if (payload.request.status === 405) {
-        window.location.href = "/main/dashboard";
+        window.location.href = "/main/home";
       }
     }
   }

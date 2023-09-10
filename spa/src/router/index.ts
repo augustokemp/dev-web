@@ -26,6 +26,7 @@ export default new Router({
         {
           path: "main",
           component: () => import("../views/main/Main.vue"),
+          redirect: "main/home",
           children: [
             {
               path: "home",
@@ -36,7 +37,7 @@ export default new Router({
       ],
     },
     {
-      path: "*",
+      path: "/*",
       redirect: "/",
     },
   ],

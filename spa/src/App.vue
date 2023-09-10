@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <v-app :style="cssProps" class="app">
-      <v-main v-if="!loggedIn === null">
+    <v-app :style="cssProps">
+      <v-main v-if="loggedIn === null">
         <v-container class="fill-height">
           <v-row align="center" justify="center">
             <v-col>
@@ -40,13 +40,21 @@ export default class App extends Vue {
     return themeColors;
   }
 
-  get darkTheme() {
-    return this.$vuetify.theme.dark === true;
-  }
-
-  
   public async created() {
     await mainStore.checkLoggedIn();
   }
 }
 </script>
+<style scoped>
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+::v-deep .blink {
+  animation: blink 0.5s infinite alternate;
+}
+</style>
