@@ -12,7 +12,7 @@
             rounded
             color="primary"
             v-model="username"
-            :rules="required"
+            :rules="[(v) => required(v, 'E-mail')]"
             label="E-mail"
           />
           <v-text-field
@@ -23,7 +23,7 @@
             rounded
             color="primary"
             v-model="password"
-            :rules="required"
+            :rules="[(v) => required(v, 'Senha')]"
             label="Senha"
           />
           <v-btn :disabled="isLoading" @click="reset" text small>Limpar</v-btn>

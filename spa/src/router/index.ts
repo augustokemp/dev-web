@@ -24,7 +24,7 @@ export default new Router({
         {
           path: "main",
           component: () => import("../views/main/Main.vue"),
-          redirect: "/main/home",
+          redirect: "main/home",
           children: [
             {
               path: "home",
@@ -37,6 +37,11 @@ export default new Router({
                 {
                   path: "/",
                   component: () => import("../views/main/users/UsersList.vue"),
+                },
+                {
+                  path: "create",
+                  component: () =>
+                    import("../views/main/users/UsersCreate.vue"),
                 },
               ],
             },
