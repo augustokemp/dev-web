@@ -3,7 +3,7 @@
     title="Criar Usuário"
     subtitle="Preencha as informações abaixo para criar um novo usuário"
   >
-    <FormComponent lazy-validation v-model="formUser" :fields="fields">
+    <FormComponent v-model="formUser" :fields="fields">
       <template #custom-1>
         <div class="pa-3">
           Endereços
@@ -24,34 +24,51 @@
             />
           </div>
 
-          <v-btn small text color="secondary" @click="showFormAddress = true"
-            >Adicionar novo endereço</v-btn
-          >
-
-          <FormComponent
-            v-if="showFormAddress"
-            class="mt-3"
-            v-model="formAddress"
-            :fields="fieldsAddress"
-            ref="FormComponent"
-          >
-            <template #buttons>
-              <v-btn
-                text
-                small
-                color="secondary"
-                rounded
-                class="ma-3"
-                :disabled="!formAddress.isValid"
-                @click="addAddress"
-                >Adicionar Endereço</v-btn
-              >
-              <v-btn text small color="primary" @click="showFormAddress = false"
-                >Cancelar</v-btn
+          <MenuComponent ref="MenuComponent" title="Adicionar endereço">
+            <template #activator>
+              <v-btn small text color="secondary"
+                >Adicionar novo endereço</v-btn
               >
             </template>
-          </FormComponent>
+
+            <template>
+              <FormComponent
+                class="mt-3"
+                v-model="formAddress"
+                :fields="fieldsAddress"
+                ref="FormComponent"
+              >
+                <template #buttons>
+                  <v-btn
+                    text
+                    small
+                    color="secondary"
+                    rounded
+                    class="ma-3"
+                    :disabled="!formAddress.isValid"
+                    @click="addAddress"
+                    >Adicionar Endereço</v-btn
+                  >
+                  <v-btn text small color="primary" @click="switchMenu(false)"
+                    >Cancelar</v-btn
+                  >
+                </template>
+              </FormComponent>
+            </template>
+          </MenuComponent>
         </div>
+      </template>
+
+      <template #buttons>
+        <v-btn
+          class="ma-3"
+          :disabled="!formUser.isValid || !customValidations"
+          rounded
+          small
+          color="primary"
+          @click="addUser"
+          >Adicionar usuário</v-btn
+        >
       </template>
     </FormComponent>
     <template #actions>
@@ -64,6 +81,7 @@
 import TemplateCard from "@/components/TemplateCard.vue";
 import FormComponent from "@/components/FormComponent.vue";
 import AddressCard from "@/components/AddressCard.vue";
+import MenuComponent from "@/components/MenuComponent.vue";
 import { IAddress } from "@/interfaces/address";
 import { IUserProfileCreate } from "@/interfaces/userProfile";
 import Component from "vue-class-component";
@@ -83,6 +101,7 @@ interface IFormAddress {
     TemplateCard,
     FormComponent,
     AddressCard,
+    MenuComponent,
   },
 })
 export default class UsersCreate extends TemplateCard {
@@ -110,71 +129,71 @@ export default class UsersCreate extends TemplateCard {
     },
   };
 
-  showFormAddress = false;
+  get customValidations() {
+    return this.formUser.data.addresses.length > 0;
+  }
 
-  fields = [
-    {
-      label: "Nome completo",
-      model: "full_name",
-      type: "text",
-      outlined: true,
-      filled: true,
-      dense: true,
-      rounded: true,
-      required: true,
-      rules: [
-        (v: string) =>
-          (!!v && this.fullNameTest(v)) || "Digite seu nome completo",
-      ],
-    },
-    {
-      label: "E-mail",
-      model: "email",
-      type: "text",
-      outlined: true,
-      filled: true,
-      dense: true,
-      rounded: true,
-      required: true,
-      rules: [(v: string) => (!!v && this.emailTest(v)) || "E-mail inválido"],
-    },
-    {
-      label: "Senha",
-      model: "password",
-      type: "password",
-      outlined: true,
-      filled: true,
-      dense: true,
-      rounded: true,
-      required: true,
-      password: true,
-    },
-    {
-      label: "Confirmar senha",
-      model: "confirm_password",
-      type: "password",
-      outlined: true,
-      filled: true,
-      dense: true,
-      rounded: true,
-      required: true,
-      rules: [
-        (v: string) =>
-          (!!v && v === this.formUser.data.password) ||
-          "A confirmação de senha precisa ser idêntica à senha",
-      ],
-      password: true,
-    },
-    {
-      label: "Endereço(s)",
-      model: "addresses",
-      type: "custom-1",
-      rules: [
-        this.formUser.data.addresses.length > 0 ||
-          "Adicione ao menos um endereço",
-      ],
-    },
-  ];
+  get fields() {
+    return [
+      {
+        label: "Nome completo",
+        model: "full_name",
+        type: "text",
+        outlined: true,
+        filled: true,
+        dense: true,
+        rounded: true,
+        required: true,
+        rules: [
+          (v: string) =>
+            (!!v && this.fullNameTest(v)) || "Digite seu nome completo",
+        ],
+      },
+      {
+        label: "E-mail",
+        model: "email",
+        type: "text",
+        outlined: true,
+        filled: true,
+        dense: true,
+        rounded: true,
+        required: true,
+        rules: [(v: string) => (!!v && this.emailTest(v)) || "E-mail inválido"],
+      },
+      {
+        label: "Senha",
+        model: "password",
+        type: "password",
+        outlined: true,
+        filled: true,
+        dense: true,
+        rounded: true,
+        required: true,
+        password: true,
+      },
+      {
+        label: "Confirmar senha",
+        model: "confirm_password",
+        type: "password",
+        outlined: true,
+        filled: true,
+        dense: true,
+        rounded: true,
+        required: true,
+        rules: [
+          (v: string) =>
+            (!!v && v === this.formUser.data.password) ||
+            "A confirmação de senha precisa ser idêntica à senha",
+        ],
+        password: true,
+      },
+      {
+        label: "Endereço(s)",
+        model: "addresses",
+        type: "custom-1",
+      },
+    ];
+  }
 
   fieldsAddress = [
     {
@@ -229,6 +248,13 @@ export default class UsersCreate extends TemplateCard {
     },
   ];
 
+  switchMenu(open: boolean) {
+    const el: any = this.$refs.MenuComponent;
+    if (el) {
+      el.isOpen = open;
+    }
+  }
+
   onClose(index: number) {
     this.formUser.data.addresses.splice(index, 1);
   }
@@ -248,12 +274,16 @@ export default class UsersCreate extends TemplateCard {
     this.formAddress.data.city = "";
     this.formAddress.data.uf = "";
 
-    this.showFormAddress = false;
+    this.switchMenu(false);
 
     const el: any = this.$refs.FormComponent;
     if (el) {
       el.resetValidation();
     }
+  }
+
+  addUser() {
+    
   }
 }
 </script>

@@ -1,11 +1,11 @@
 <template>
   <v-form
+    class="pt-6"
     ref="Form"
     :lazy-validation="lazyValidation"
     :class="formClass"
     v-model="value.isValid"
   >
-    {{ customRules }}aaa
     <template v-for="(field, idx) in fields">
       <v-text-field
         @blur="onBlur(field)"
@@ -57,7 +57,6 @@ export default class FormComponent extends Vue {
   @Prop({ type: Boolean, default: false }) readonly lazyValidation!: boolean;
 
   get customRules() {
-    console.log(_.flatMap(this.customFields, "rules"));
     return _.every(_.flatMap(this.customFields, "rules"));
   }
 
