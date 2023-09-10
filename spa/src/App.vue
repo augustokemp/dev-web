@@ -18,6 +18,7 @@
         </v-container>
       </v-main>
       <router-view v-else />
+      <NotificationsManager></NotificationsManager>
     </v-app>
   </div>
 </template>
@@ -25,8 +26,13 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { mainStore } from "@/store";
+import NotificationsManager from "@/components/NotificationsManager.vue"
 
-@Component
+@Component({
+  components: {
+    NotificationsManager
+  }
+})
 export default class App extends Vue {
   get loggedIn() {
     return mainStore.isLoggedIn;

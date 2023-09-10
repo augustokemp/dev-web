@@ -1,2 +1,3 @@
 *.mako
 vetur.config.js
+*.log

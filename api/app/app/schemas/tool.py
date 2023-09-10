@@ -17,6 +17,9 @@ class ToolBase(BaseModel):
 class ToolUpdate(ToolBase):
     pass
 
+class ToolCreate(ToolBase):
+    pass
+
 
 class ToolInDBBase(ToolBase):
     id: int

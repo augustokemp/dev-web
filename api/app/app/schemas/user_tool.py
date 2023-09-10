@@ -24,6 +24,9 @@ class UserToolBase(BaseModel):
 class UserToolUpdate(UserToolBase):
     pass
 
+class UserToolCreate(UserToolBase):
+    pass
+
 
 class UserToolInDBBase(UserToolBase):
     id: int

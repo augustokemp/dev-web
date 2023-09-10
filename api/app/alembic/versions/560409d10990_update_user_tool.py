@@ -24,6 +24,16 @@ def upgrade() -> None:
     op.add_column('user_tool', sa.Column('allow_read', sa.Boolean(), nullable=True))
     op.add_column('user_tool', sa.Column('allow_update', sa.Boolean(), nullable=True))
     op.add_column('user_tool', sa.Column('allow_delete', sa.Boolean(), nullable=True))
+
+    op.execute("""
+        UPDATE user_tool SET
+               allow_create = TRUE,
+               allow_read = TRUE,
+               allow_update = TRUE,
+               allow_delete = TRUE
+        WHERE
+            user_id = 1
+    """)
     # ### end Alembic commands ###
 
 
