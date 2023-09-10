@@ -13,7 +13,7 @@ class Address(Base):
         return v
 
     street = Column(String, nullable=False, index=False)
-    street_number = Column(String, nullable=True, index=False)
-    neighborhood = Column(String, nullable=True, index=False)
-    city = Column(String, nullable=True, index=False)
-    uf = Column(String, nullable=True, index=False)
+    street_number = Column(String, nullable=False, index=False)
+    neighborhood = Column(String, nullable=False, index=False)
+    city = Column(String, nullable=False, index=False)
+    uf = Column(String, nullable=False, index=False)
