@@ -15,6 +15,8 @@ export default class AdminModule extends VuexModule {
     is_admin: false,
     full_name: "",
     id: 0,
+    addresses: [],
+    user_tools: []
   };
 
   @Mutation

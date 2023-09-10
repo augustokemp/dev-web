@@ -19,3 +19,5 @@ class User(Base):
     is_admin = Column(Boolean, default=False)
 
     addresses = relationship("Address", secondary="user_address", back_populates="users")
+    user_tools = relationship("UserTool", backref="user", lazy="joined")
+    

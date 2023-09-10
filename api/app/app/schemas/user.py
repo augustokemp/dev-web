@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import List, Optional
 
 from app.schemas.address import Address
+from app.schemas.user_tool import UserTool
 from pydantic import BaseModel, EmailStr
 
 
@@ -38,6 +39,7 @@ class UserInDBBase(UserBase):
 class User(UserInDBBase):
     id: int
     addresses: List[Address]
+    user_tools: Optional[List[UserTool]]
 
     class Config:
         arbitrary_types_allowed = True

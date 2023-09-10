@@ -50,6 +50,18 @@
         </v-list-item>
       </v-list>
       <v-divider></v-divider>
+      <v-list nav dense>
+        <v-list-item :to="tool.tool.path" v-for="tool in currentUserTools" :key="tool.id">
+          <v-list-item-icon>
+            <v-icon>{{ tool.tool.icon }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>
+              {{ tool.tool.name }}
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
       <v-divider></v-divider>
     </v-navigation-drawer>
 
@@ -89,6 +101,10 @@ export default class Main extends Vue {
 
   get currentUser() {
     return mainStore.userProfile!;
+  }
+
+  get currentUserTools() {
+    return mainStore.currentUserTools;
   }
 
   public fixedTools = [];

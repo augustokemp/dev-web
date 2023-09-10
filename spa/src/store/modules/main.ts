@@ -26,6 +26,10 @@ export default class MainModule extends VuexModule {
 
   public notifications: IAppNotification[] = [];
 
+  get currentUserTools() {
+    return this.userProfile!.user_tools || [];
+  }
+
   get hasAdminAccess() {
     return (
       this.userProfile &&

@@ -1,3 +1,6 @@
+import { IAdress } from "./address";
+import { IUserTool } from "./userTool";
+
 export interface IUserProfile {
   id?: number;
   name?: string;
@@ -5,6 +8,8 @@ export interface IUserProfile {
   is_active: boolean;
   is_admin: boolean;
   full_name: string;
+  addresses: IAdress[];
+  user_tools: IUserTool[];
 }
 
 export interface IUserProfileCreate {
