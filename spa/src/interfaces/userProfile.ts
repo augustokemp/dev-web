@@ -1,4 +1,4 @@
-import { IAdress } from "./address";
+import { IAddress } from "./address";
 import { IUserTool } from "./userTool";
 
 export interface IUserProfile {
@@ -8,13 +8,14 @@ export interface IUserProfile {
   is_active: boolean;
   is_admin: boolean;
   full_name: string;
-  addresses: IAdress[];
-  user_tools: IUserTool[];
+  addresses: IAddress[];
+  user_tools?: IUserTool[];
 }
 
-export interface IUserProfileCreate {
+export interface IUserProfileCreate extends IUserProfile {
   email: string;
   password: string;
+  confirmPassword: string;
 }
 
 export interface IUserProfileUpdate extends IUserProfile {}
