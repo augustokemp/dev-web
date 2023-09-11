@@ -41,6 +41,9 @@
             <v-card-title class="text-subtitle-1">{{
               field.label
             }}</v-card-title>
+            <v-card-text v-if="!settingParentField && formData[field.model]">
+              {{ formData[field.model] }}
+            </v-card-text>
             <v-card-text>
               <MenuComponent ref="MenuComponent" title="Adicionar endereço">
                 <template #activator>
@@ -89,7 +92,7 @@
 <script lang="ts">
 import Component from "vue-class-component";
 import Vue from "vue";
-import { Emit, Prop } from "vue-property-decorator";
+import { Prop } from "vue-property-decorator";
 import AddressCard from "@/components/AddressCard.vue";
 import MenuComponent from "@/components/MenuComponent.vue";
 
@@ -122,18 +125,24 @@ export default class FormComponent extends Vue {
   }
 
   updateParentField(val, field) {
+    this.settingParentField = true;
     if (field.multiple) {
       if (!this.formData[field.model]) {
         this.formData[field.model] = [];
       }
-      this.formData[field.model].push(val);
+      this.$set(this.formData, field.model, [
+        ...this.formData[field.model],
+        val,
+      ]);
     } else {
       this.formData[field.model] = val;
     }
+    this.settingParentField = false;
   }
 
   isValid = false;
   formData: any = {};
+  settingParentField = false;
 
   get customRules() {
     return _.every(_.flatMap(this.customFields, "rules"));
