@@ -3,7 +3,6 @@
     <v-card-title class="primary--text text-subtitle-1" v-if="title">
       {{ title }}
     </v-card-title>
-    {{ formData }}
     <v-card-text>
       <v-form ref="Form" :lazy-validation="lazyValidation" v-model="isValid">
         <template v-for="(field, idx) in fields">
@@ -38,27 +37,29 @@
             </template>
           </v-text-field>
 
-          <div v-else-if="field.type === 'form'" :key="idx">
-            <div v-if="formData[field.model]">
-              {{ formData[field.model] }}
-            </div>
-            <MenuComponent ref="MenuComponent" title="Adicionar endereço">
-              <template #activator>
-                <v-btn small text color="secondary">Adicionar endereço</v-btn>
-              </template>
+          <v-card v-else-if="field.type === 'form'" :key="idx">
+            <v-card-title class="text-subtitle-1">{{
+              field.label
+            }}</v-card-title>
+            <v-card-text>
+              <MenuComponent ref="MenuComponent" title="Adicionar endereço">
+                <template #activator>
+                  <v-btn small text color="secondary">Adicionar endereço</v-btn>
+                </template>
 
-              <template>
-                <FormComponent
-                  @submitChild="(val) => onSubmit(val, field)"
-                  :flat="field.flat"
-                  :submit-label="field.submitLabel"
-                  :title="field.label"
-                  :fields="field.fields"
-                  :isChild="true"
-                />
-              </template>
-            </MenuComponent>
-          </div>
+                <template>
+                  <FormComponent
+                    @submitChild="(val) => updateParentField(val, field)"
+                    :flat="field.flat"
+                    :submit-label="field.submitLabel"
+                    :fields="field.fields"
+                    :isChild="true"
+                    :clear-on-submit="field.clearOnSubmit"
+                  />
+                </template>
+              </MenuComponent>
+            </v-card-text>
+          </v-card>
 
           <slot
             v-else-if="field.type.startsWith('custom')"
@@ -75,7 +76,7 @@
         rounded
         small
         color="primary"
-        @click="onSubmit"
+        @click="isChild ? onSubmitChild() : onSubmit()"
         >{{ submitLabel }}</v-btn
       >
       <v-btn @click="resetFields" class="ma-2" rounded small>{{
@@ -88,7 +89,7 @@
 <script lang="ts">
 import Component from "vue-class-component";
 import Vue from "vue";
-import { Prop } from "vue-property-decorator";
+import { Emit, Prop } from "vue-property-decorator";
 import AddressCard from "@/components/AddressCard.vue";
 import MenuComponent from "@/components/MenuComponent.vue";
 
@@ -107,19 +108,27 @@ export default class FormComponent extends Vue {
   @Prop({ type: Boolean, default: true }) readonly clearOnSubmit!: boolean;
   @Prop({ type: Boolean, default: false }) readonly isChild!: boolean;
 
-  onSubmit(val, field) {
+  onSubmit() {
+    this.$emit("submit", this.formData);
+  }
+
+  onSubmitChild() {
     if (this.isChild) {
       this.$emit("submitChild", this.formData);
-      this.formData = {};
-    } else {
-      if (field.multiple) {
-        if (!this.formData[field.model]) {
-          this.formData[field.model] = [];
-        }
-        this.formData[field.model].push(val);
-      } else {
-        this.formData[field.model] = val;
+      if (this.clearOnSubmit) {
+        this.formData = {};
       }
+    }
+  }
+
+  updateParentField(val, field) {
+    if (field.multiple) {
+      if (!this.formData[field.model]) {
+        this.formData[field.model] = [];
+      }
+      this.formData[field.model].push(val);
+    } else {
+      this.formData[field.model] = val;
     }
   }
 

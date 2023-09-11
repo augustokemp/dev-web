@@ -81,6 +81,7 @@ export default class UsersCreate extends TemplateCard {
       multiple: true,
       submitLabel: "Adicionar endereço",
       flat: true,
+      clearOnSubmit: true,
       fields: [
         {
           label: "Logradouro",
