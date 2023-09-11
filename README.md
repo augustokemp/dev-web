@@ -35,30 +35,31 @@ Federal Catarinense sob a direção do professor Daniel Varela.
 
 ```
 Frontend:
-- VueJS 2.7
-- Vuetify 2
-- Axios
-- Lodash
+- TypeScript (Programming Language)
+- VueJS 2.7 (Web UI Framework)
+- Vuetify 2 (Vue UI Library)
+- Axios (Node HTTP Client)
+- Lodash (JavaScript Utility Library)
 
 Backend:
-- Python 3
-- FastAPI
-- Uvicorn
-- PostgreSQL
+- Python 3 (Programming Language)
+- FastAPI (API Web Framework)
+- Uvicorn (ASGI Web Server)
+- PostgreSQL (SQL DB)
+- SQLAlchemy (Python SQL ORM)
+- Pydantic (Data Validation Library)
 ```
 
 ### Requerimentos:
 
 ```
-npm >= 6.12.0
-node >= 12.13.0
-python3 >= 3.11.4
-postgres >= 12 (sudo apt install postgresql postgresql-contrib)
+docker & docker-compose
 ```
 
 ## Inicialização
 
 ```
 1. cd dev-web
-2. bash init.sh
+2. docker-compose up
+3. [Localhost](http://localhost:8080/)
 ```
