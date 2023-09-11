@@ -1,60 +1,130 @@
 <template>
-  <v-form
-    class="pt-6"
-    ref="Form"
-    :lazy-validation="lazyValidation"
-    :class="formClass"
-    v-model="value.isValid"
-  >
-    <template v-for="(field, idx) in fields">
-      <v-text-field
-        @blur="onBlur(field)"
-        v-model="value.data[field.model]"
-        :type="field.type"
-        :outlined="field.outlined"
-        :rounded="field.rounded"
-        :filled="field.filled"
-        :dense="field.dense"
-        :key="idx"
-        v-if="['text', 'password'].includes(field.type)"
-        :label="field.label"
-        :rules="
-          required
-            ? [(v) => required(v, field.label), ...(field.rules || [])]
-            : field.rules
-        "
-      >
-        <template #append>
-          <v-btn
-            @click="
-              field.type = field.type === 'password' ? 'text' : 'password'
+  <v-card :flat="flat">
+    <v-card-title class="primary--text text-subtitle-1" v-if="title">
+      {{ title }}
+    </v-card-title>
+    {{ formData }}
+    <v-card-text>
+      <v-form ref="Form" :lazy-validation="lazyValidation" v-model="isValid">
+        <template v-for="(field, idx) in fields">
+          <v-text-field
+            v-if="['text', 'password'].includes(field.type)"
+            @blur="onBlur(field)"
+            v-model="formData[field.model]"
+            :type="field.type"
+            :outlined="field.outlined"
+            :rounded="field.rounded"
+            :filled="field.filled"
+            :dense="field.dense"
+            :key="idx"
+            :label="field.label"
+            :rules="
+              required
+                ? [(v) => required(v, field.label), ...(field.rules || [])]
+                : field.rules
             "
-            icon
-            v-if="field.password"
           >
-            <v-icon v-if="field.type === 'password'">mdi-eye-off</v-icon>
-            <v-icon v-else>mdi-eye</v-icon>
-          </v-btn>
+            <template #append>
+              <v-btn
+                @click="
+                  field.type = field.type === 'password' ? 'text' : 'password'
+                "
+                icon
+                v-if="field.password"
+              >
+                <v-icon v-if="field.type === 'password'">mdi-eye-off</v-icon>
+                <v-icon v-else>mdi-eye</v-icon>
+              </v-btn>
+            </template>
+          </v-text-field>
+
+          <div v-else-if="field.type === 'form'" :key="idx">
+            <div v-if="formData[field.model]">
+              {{ formData[field.model] }}
+            </div>
+            <MenuComponent ref="MenuComponent" title="Adicionar endereço">
+              <template #activator>
+                <v-btn small text color="secondary">Adicionar endereço</v-btn>
+              </template>
+
+              <template>
+                <FormComponent
+                  @submitChild="(val) => onSubmit(val, field)"
+                  :flat="field.flat"
+                  :submit-label="field.submitLabel"
+                  :title="field.label"
+                  :fields="field.fields"
+                  :isChild="true"
+                />
+              </template>
+            </MenuComponent>
+          </div>
+
+          <slot
+            v-else-if="field.type.startsWith('custom')"
+            :name="field.type"
+          />
         </template>
-      </v-text-field>
-      <slot v-else-if="field.type.startsWith('custom')" :name="field.type" />
-    </template>
-    <slot name="buttons" />
-  </v-form>
+        <slot name="buttons" />
+      </v-form>
+    </v-card-text>
+    <v-card-actions class="mx-2">
+      <v-btn
+        class="ma-2 ml-0"
+        :disabled="!isValid"
+        rounded
+        small
+        color="primary"
+        @click="onSubmit"
+        >{{ submitLabel }}</v-btn
+      >
+      <v-btn @click="resetFields" class="ma-2" rounded small>{{
+        resetLabel
+      }}</v-btn>
+    </v-card-actions>
+  </v-card>
 </template>
 
 <script lang="ts">
 import Component from "vue-class-component";
 import Vue from "vue";
 import { Prop } from "vue-property-decorator";
+import AddressCard from "@/components/AddressCard.vue";
+import MenuComponent from "@/components/MenuComponent.vue";
+
 import _ from "lodash";
 
-@Component
+@Component({
+  components: { FormComponent, AddressCard, MenuComponent },
+})
 export default class FormComponent extends Vue {
   @Prop({ type: Array }) readonly fields!: any[];
-  @Prop({ type: Object }) readonly value!: any;
+  @Prop({ type: String, default: "" }) readonly title!: string;
+  @Prop({ type: String, default: "Enviar" }) readonly submitLabel!: string;
+  @Prop({ type: String, default: "Resetar" }) readonly resetLabel!: string;
   @Prop({ type: Boolean, default: false }) readonly flat!: boolean;
   @Prop({ type: Boolean, default: false }) readonly lazyValidation!: boolean;
+  @Prop({ type: Boolean, default: true }) readonly clearOnSubmit!: boolean;
+  @Prop({ type: Boolean, default: false }) readonly isChild!: boolean;
+
+  onSubmit(val, field) {
+    if (this.isChild) {
+      this.$emit("submitChild", this.formData);
+      this.formData = {};
+    } else {
+      if (field.multiple) {
+        if (!this.formData[field.model]) {
+          this.formData[field.model] = [];
+        }
+        this.formData[field.model].push(val);
+      } else {
+        this.formData[field.model] = val;
+      }
+    }
+  }
+
+  isValid = false;
+  formData: any = {};
 
   get customRules() {
     return _.every(_.flatMap(this.customFields, "rules"));
@@ -64,19 +134,17 @@ export default class FormComponent extends Vue {
     return _.filter(this.fields, (f) => f.type.startsWith("custom"));
   }
 
-  get formClass() {
-    switch (true) {
-      case this.flat:
-        return "pa-3";
-      default:
-        return "pa-3 rounded-lg elevation-1";
+  resetFields() {
+    const el: any = this.$refs.Form;
+    if (el) {
+      el.reset();
     }
   }
 
   resetValidation() {
     const el: any = this.$refs.Form;
     if (el) {
-      el.reset();
+      el.resetValidation();
     }
   }
 
@@ -87,6 +155,21 @@ export default class FormComponent extends Vue {
         el.validate();
       }
     }
+  }
+
+  startMultipleFields() {
+    _.forEach(this.fields, (f) => {
+      if (f.type === "form") {
+        if (f.multiple) {
+          this.formData[f.model] = [];
+          console.log(this.formData);
+        }
+      }
+    });
+  }
+
+  mounted() {
+    this.startMultipleFields;
   }
 }
 </script>
