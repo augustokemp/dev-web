@@ -28,6 +28,9 @@ class UserToolCreate(UserToolBase):
     pass
 
 
+class UserToolCreateFull(UserToolBase):
+    user_id: Optional[int]
+
 class UserToolInDBBase(UserToolBase):
     id: int
     created_at: datetime
