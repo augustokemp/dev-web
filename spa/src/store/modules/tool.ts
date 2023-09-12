@@ -3,6 +3,7 @@ import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 import { ITool } from "@/interfaces/tool";
 import { mainStore } from "..";
+import _ from "lodash";
 
 @Module({ name: "tool" })
 export default class ToolModule extends VuexModule {

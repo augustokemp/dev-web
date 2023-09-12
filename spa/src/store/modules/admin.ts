@@ -16,7 +16,7 @@ export default class AdminModule extends VuexModule {
     full_name: "",
     id: 0,
     addresses: [],
-    user_tools: []
+    user_tools: [],
   };
 
   @Mutation
@@ -73,6 +73,18 @@ export default class AdminModule extends VuexModule {
         content: error.response.data.detail,
         color: "error",
       });
+      await mainStore.checkApiError(<any>error);
+    }
+  }
+
+  @Action
+  public async deleteUser(id: number) {
+    try {
+      const response = await api.deleteUser(mainStore.token, id);
+      if (response) {
+        this.setUsers(_.filter(this.users, (u) => u.id !== id));
+      }
+    } catch (error) {
       await mainStore.checkApiError(<any>error);
     }
   }

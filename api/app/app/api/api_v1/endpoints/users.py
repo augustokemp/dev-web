@@ -96,3 +96,35 @@ def create_user(
     # Retorna user criado
     db.refresh(db_user)
     return db_user
+
+
+@router.delete("/{id}/", response_model=int)
+def delete_user(
+    id: int,
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_active_user),
+) -> Any:
+    """
+    Remove usuário, tools e user_addresses
+    """
+
+    db.expire_on_commit = False
+
+    user_tool = crud.user_tool.get(db=db, user_id=current_user.id, tool_id=1)
+    if not user_tool or not user_tool.allow_delete:
+        raise HTTPException(403, "Usuário não autorizado")
+
+    db_user = crud.user.get(db=db, id=id)
+    if not db_user:
+        raise HTTPException(404, "Usuário não encontrado")
+
+    crud.user_tool.remove_multi(
+        db=db, user_id=db_user.id
+    )
+
+    crud.user_address.remove_multi(
+        db=db, user_id=db_user.id
+    )
+
+    crud.user.remove(db=db, id=id)
+    return db_user.id

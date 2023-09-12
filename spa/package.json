@@ -18,6 +18,7 @@
     "vue-class-component": "^7.2.3",
     "vue-property-decorator": "^9.1.2",
     "vue-router": "^3.5.1",
+    "vue-sweetalert2": "^3.0.5",
     "vuetify": "^2.6.0",
     "vuex": "^3.6.2",
     "vuex-module-decorators": "^0.17.0",

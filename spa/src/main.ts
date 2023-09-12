@@ -3,6 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
+import "@/plugins/sweet-alert";
 import "./component-hooks";
 import "./registerServiceWorker";
 import { parse } from "date-fns";
@@ -18,6 +19,16 @@ new Vue({
 }).$mount("#app");
 
 Vue.mixin({
+  data() {
+    return {
+      swalDefaults: {
+        showCancelButton: true,
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancelar",
+        reverseButtons: true,
+      },
+    };
+  },
   methods: {
     parseDate: function (date: string) {
       return parse(
@@ -46,5 +57,6 @@ declare module "vue/types/vue" {
     fullNameTest: (v: string) => boolean;
     mixinPhoneRule: () => any[];
     mixinDateRules: () => any[];
+    swalDefaults: any;
   }
 }

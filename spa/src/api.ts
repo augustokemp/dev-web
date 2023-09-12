@@ -41,11 +41,11 @@ const api = {
   async createUser(token: string, data: IUserProfileCreate) {
     return axios.post(`${apiUrl}/api/v1/users/`, data, authHeaders(token));
   },
+  async deleteUser(token: string, id: number) {
+    return axios.delete(`${apiUrl}/api/v1/users/${id}/`, authHeaders(token));
+  },
   async getTools(token: string) {
-    return axios.get<ITool[]>(
-      `${apiUrl}/api/v1/tools/`,
-      authHeaders(token)
-    );
+    return axios.get<ITool[]>(`${apiUrl}/api/v1/tools/`, authHeaders(token));
   },
 };
 
