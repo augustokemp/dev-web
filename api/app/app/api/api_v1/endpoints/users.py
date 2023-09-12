@@ -85,27 +85,14 @@ def create_user(
             address_id=address_id
         ))
 
-    # Cria/Atualiza user_tools
+    # Cria user_tools
     for user_tool in payload.user_tools:
+        user_tool_in = models.UserTool(
+            **jsonable_encoder(user_tool))
+        user_tool_in.user_id = db_user.id
 
-        db_user_tool = crud.user_tool.get(
-            db=db, user_id=db_user.id, tool_id=user_tool.tool_id)
+        crud.user_tool.create(db=db, obj_in=user_tool_in)
 
-        if not db_user_tool:
-            user_tool_in = models.UserTool(
-                **jsonable_encoder(user_tool))
-            user_tool_in.user_id = db_user.id
-
-            db_user_tool = crud.user_tool.create(db=db, obj_in=user_tool_in)
-
-        else:
-            user_tool_in = schemas.UserToolUpdate(
-                **jsonable_encoder(user_tool))
-            user_tool_in.user_id = db_user.id
-
-            db_user_tool = crud.user_tool.update(
-                db=db, db_obj=db_user_tool, obj_in=user_tool_in
-            )
     # Retorna user criado
     db.refresh(db_user)
     return db_user
