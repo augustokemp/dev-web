@@ -38,6 +38,19 @@ def read_user_me(
     return current_user
 
 
+@router.get("/{id}/", response_model=schemas.User)
+def read_user(
+    id: int,
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_active_user),
+) -> Any:
+    """
+    Retorna usuário específico
+    """
+
+    return crud.user.get(db=db, id=id)
+
+
 @router.post("/", response_model=schemas.User)
 def create_user(
     payload: schemas.UserCreateFull,

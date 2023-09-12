@@ -19,7 +19,7 @@
         </DataTableComponent>
       </template>
       <template #[`item.edit`]="{ item }">
-        <v-btn :disabled="!userTool.allow_update" icon>
+        <v-btn :to="`/main/users/create/${item.id}`" :disabled="!userTool.allow_update" icon>
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
       </template>

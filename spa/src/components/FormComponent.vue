@@ -105,19 +105,17 @@
                 </v-btn>
                 <v-card-text v-if="field.key">
                   <div v-for="(v, k) in formDataValue" :key="k">
-                    <div v-if="!k.includes('id')">
-                      {{
-                        field.fields[formDataIndex].items.find(
-                          (f) => f["model"] == k
-                        ).label
-                      }}: {{ v }}
+                    <div v-if="!k.includes('id') && !k.includes('tool')">
+                      {{ getField(true, field, formDataIndex, k) }}: {{ v }}
                     </div>
                   </div>
                 </v-card-text>
                 <v-card-text v-else>
                   <div v-for="(v, k) in formDataValue" :key="k">
-                    {{ field.fields.find((f) => f.model === k).label }}:
-                    {{ v }}
+                    <div v-if="!k.includes('id')">
+                      {{ getField(false, field, formDataIndex, k) }}: {{ v }}
+                      {{ v }}
+                    </div>
                   </div>
                 </v-card-text>
               </v-card>
@@ -125,7 +123,9 @@
             <v-card-text>
               <MenuComponent ref="MenuComponent" :title="field.submitLabel">
                 <template #activator>
-                  <v-btn small text color="secondary">Adicionar endereço</v-btn>
+                  <v-btn small text color="secondary">{{
+                    field.submitLabel
+                  }}</v-btn>
                 </template>
 
                 <template>
@@ -280,6 +280,20 @@ export default class FormComponent extends Vue {
     this.settingParentField = true;
     this.formData[fieldModel].splice(index, 1);
     this.settingParentField = false;
+  }
+
+  getField(items: boolean, field: any, index: number, k: string) {
+    if (items) {
+      const val = field.fields[index];
+      if (val && val.items) {
+        return val.items.find((f) => f["model"] == k).label;
+      }
+    } else {
+      const val = field.fields.find((f) => f.model === k);
+      if (val) {
+        return val.label;
+      }
+    }
   }
 
   mounted() {

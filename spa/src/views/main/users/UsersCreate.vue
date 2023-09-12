@@ -4,6 +4,7 @@
     subtitle="Preencha as informações abaixo para criar um novo usuário"
   >
     <FormComponent
+      ref="FormComponent"
       @submit="onSubmit"
       title="Dados do Usuário"
       submitLabel="Adicionar usuário"
@@ -19,7 +20,7 @@
 import TemplateCard from "@/components/TemplateCard.vue";
 import FormComponent from "@/components/FormComponent.vue";
 import Component from "vue-class-component";
-import { toolStore } from "@/store";
+import { adminStore, toolStore } from "@/store";
 import _ from "lodash";
 
 @Component({
@@ -229,6 +230,18 @@ export default class UsersCreate extends TemplateCard {
   }
 
   async mounted() {
+    const params = _.get(this.$router.currentRoute, "params", {});
+    const id = _.get(params, "id");
+
+    if (id) {
+      await adminStore.getUser(id);
+      const user = adminStore.user;
+      const form: any = this.$refs.FormComponent;
+      if (form) {
+        form.formData = user;
+      }
+    }
+
     await toolStore.getTools();
   }
 }

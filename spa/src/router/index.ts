@@ -39,7 +39,7 @@ export default new Router({
                   component: () => import("../views/main/users/UsersList.vue"),
                 },
                 {
-                  path: "create",
+                  path: "create/:id?",
                   component: () =>
                     import("../views/main/users/UsersCreate.vue"),
                 },
