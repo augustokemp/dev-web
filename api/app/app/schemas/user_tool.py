@@ -28,7 +28,7 @@ class UserToolCreate(UserToolBase):
     pass
 
 
-class UserToolCreateFull(UserToolBase):
+class UserToolCreateFieldsToReceive(UserToolBase):
     user_id: Optional[int]
 
 class UserToolInDBBase(UserToolBase):

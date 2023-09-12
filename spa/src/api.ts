@@ -1,6 +1,10 @@
 import { apiUrl } from "@/env";
 import axios from "axios";
-import { IUserProfile, IUserProfileCreate } from "./interfaces/userProfile";
+import {
+  IUserProfile,
+  IUserProfileCreate,
+  IUserProfileUpdate,
+} from "./interfaces/userProfile";
 import { ITool } from "./interfaces/tool";
 
 function authHeaders(token: string) {
@@ -38,10 +42,24 @@ const api = {
       authHeaders(token)
     );
   },
-  async createUser(token: string, data: IUserProfileCreate) {
+  async createUser(
+    token: string,
+    data: IUserProfileCreate
+  ): Promise<IUserProfile> {
     return axios.post(`${apiUrl}/api/v1/users/`, data, authHeaders(token));
   },
-  async deleteUser(token: string, id: number) {
+  async updateUser(
+    token: string,
+    id: number,
+    data: IUserProfileUpdate
+  ): Promise<IUserProfile> {
+    return axios.post(
+      `${apiUrl}/api/v1/users/${id}/`,
+      data,
+      authHeaders(token)
+    );
+  },
+  async deleteUser(token: string, id: number): Promise<Number> {
     return axios.delete(`${apiUrl}/api/v1/users/${id}/`, authHeaders(token));
   },
   async getTools(token: string) {

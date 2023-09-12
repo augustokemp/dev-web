@@ -6,7 +6,7 @@ from app.schemas.user_tool import UserTool
 from pydantic import BaseModel, EmailStr
 
 from app.schemas.address import AddressCreate
-from app.schemas.user_tool import UserToolCreateFull
+from app.schemas.user_tool import UserToolCreateFieldsToReceive
 
 # Shared properties
 
@@ -23,9 +23,9 @@ class UserCreate(UserBase):
     password: str
     
 
-class UserCreateFull(UserCreate):
+class UserCreateFieldsToReceive(UserCreate):
     addresses: List[AddressCreate]
-    user_tools: List[UserToolCreateFull]
+    user_tools: List[UserToolCreateFieldsToReceive]
 
 # Properties to receive via API on update
 class UserUpdate(UserBase):

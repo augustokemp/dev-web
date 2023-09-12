@@ -1,6 +1,10 @@
 import api from "@/api";
 import { VuexModule, Module, Mutation, Action } from "vuex-module-decorators";
-import { IUserProfile, IUserProfileCreate } from "@/interfaces/userProfile";
+import {
+  IUserProfile,
+  IUserProfileCreate,
+  IUserProfileUpdate,
+} from "@/interfaces/userProfile";
 import _ from "lodash";
 import { mainStore } from "@/utils/store-acessor";
 
@@ -54,23 +58,60 @@ export default class AdminModule extends VuexModule {
   }
 
   @Action
+  public async updateUser(payload: {
+    id: number;
+    payload: IUserProfileUpdate;
+  }) {
+    const loadingNotification = { content: "Salvando", showProgress: true };
+    try {
+      mainStore.addNotification(loadingNotification);
+
+      const result = await api.updateUser(
+        mainStore.token,
+        payload.id,
+        payload.payload
+      );
+
+      this.setUser(result);
+      this.setUsers(
+        _.map(this.users, (u) => (u.id === payload.id ? result : u))
+      );
+
+      mainStore.removeNotification(loadingNotification);
+      mainStore.addNotification({
+        content: "Usuário atualizado com sucesso",
+        color: "success",
+      });
+    } catch (error: any) {
+      mainStore.removeNotification(loadingNotification);
+      mainStore.addNotification({
+        content:
+          error.response.data.detail || "Houve um erro ao atualizar o usuário",
+        color: "error",
+      });
+      await mainStore.checkApiError(<any>error);
+    }
+  }
+
+  @Action
   public async createUser(payload: IUserProfileCreate) {
     const loadingNotification = { content: "Salvando", showProgress: true };
     try {
       mainStore.addNotification(loadingNotification);
 
       const result = await api.createUser(mainStore.token, payload);
-
+      this.setUser(result);
+      this.setUsers([...this.users, result]);
       mainStore.removeNotification(loadingNotification);
       mainStore.addNotification({
         content: "Usuário criado com sucesso",
         color: "success",
       });
-      return result.data.id;
     } catch (error: any) {
       mainStore.removeNotification(loadingNotification);
       mainStore.addNotification({
-        content: error.response.data.detail,
+        content:
+          error.response.data.detail || "Houve um erro ao criar o usuário",
         color: "error",
       });
       await mainStore.checkApiError(<any>error);
