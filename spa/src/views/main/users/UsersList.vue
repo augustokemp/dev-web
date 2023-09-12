@@ -45,6 +45,7 @@ export default class UsersList extends TemplateCard {
   headers = [
     { text: "Nome", value: "full_name", align: "center" },
     { text: "E-mail", value: "email", align: "center" },
+    { text: "Admin", value: "is_admin", align: "center" },
     { text: "Endereços", value: "addresses", align: "center" },
   ];
 

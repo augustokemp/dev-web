@@ -123,7 +123,7 @@
               </v-card>
             </v-card-text>
             <v-card-text>
-              <MenuComponent ref="MenuComponent" title="Adicionar endereço">
+              <MenuComponent ref="MenuComponent" :title="field.submitLabel">
                 <template #activator>
                   <v-btn small text color="secondary">Adicionar endereço</v-btn>
                 </template>
