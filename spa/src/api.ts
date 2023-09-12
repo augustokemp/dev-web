@@ -1,6 +1,7 @@
 import { apiUrl } from "@/env";
 import axios from "axios";
 import { IUserProfile, IUserProfileCreate } from "./interfaces/userProfile";
+import { ITool } from "./interfaces/tool";
 
 function authHeaders(token: string) {
   return {
@@ -39,6 +40,12 @@ const api = {
   },
   async createUser(token: string, data: IUserProfileCreate) {
     return axios.post(`${apiUrl}/api/v1/users/`, data, authHeaders(token));
+  },
+  async getTools(token: string) {
+    return axios.get<ITool[]>(
+      `${apiUrl}/api/v1/tools/`,
+      authHeaders(token)
+    );
   },
 };
 

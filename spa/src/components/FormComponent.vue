@@ -37,12 +37,90 @@
             </template>
           </v-text-field>
 
-          <v-card v-else-if="field.type === 'form'" :key="idx">
+          <div v-else-if="field.type === 'multiboolean'" :key="idx">
+            <v-row align="center">
+              <v-col cols="auto">
+                <div class="font-weight-bold text-subtitle-2">
+                  {{ field.label }}
+                </div>
+              </v-col>
+              <v-col v-for="(item, item_idx) in field.items" :key="item_idx">
+                <v-text-field
+                  :filled="item.filled"
+                  outlined
+                  :dense="item.dense"
+                  :hide-details="item.hideDetails"
+                  :label="item.label"
+                  :readonly="item.readonly"
+                  v-if="item.type === 'text'"
+                  :value="item.value"
+                />
+                <v-checkbox
+                  @click="addItem(field, item)"
+                  v-if="item.type === 'boolean'"
+                  :label="item.label"
+                  v-model="formData[item.model]"
+                />
+              </v-col>
+            </v-row>
+          </div>
+
+          <v-switch
+            inset
+            color="primary"
+            class="ml-3"
+            v-else-if="field.type === 'boolean'"
+            :key="idx"
+            v-model="formData[field.model]"
+            :label="field.label"
+          />
+
+          <v-card v-else-if="field.type === 'form'" class="my-3" :key="idx">
             <v-card-title class="text-subtitle-1">{{
               field.label
             }}</v-card-title>
-            <v-card-text v-if="!settingParentField && formData[field.model]">
-              {{ formData[field.model] }}
+            <v-card-text
+              class="d-flex"
+              v-if="
+                !settingParentField &&
+                formData[field.model] &&
+                formData[field.model].length > 0
+              "
+            >
+              <v-card
+                outlined
+                width="fit-content"
+                class="ma-3"
+                v-for="(formDataValue, formDataIndex) in formData[field.model]"
+                :key="formDataIndex"
+              >
+                <v-btn
+                  @click="removeItem(field.model, formDataIndex)"
+                  text
+                  x-small
+                  class="ma-2 mb-0 d-flex mx-auto"
+                >
+                  Excluir
+                  <v-icon size="18">mdi-close</v-icon>
+                </v-btn>
+                <v-card-text v-if="field.key">
+                  <div v-for="(v, k) in formDataValue" :key="k">
+                    <div v-if="!k.includes('id')">
+                      {{
+                        field.fields[formDataIndex].items.find(
+                          (f) => f["model"] == k
+                        ).label
+                      }}: {{ v }}
+                    </div>
+                  </div>
+                </v-card-text>
+                <v-card-text v-else>
+                  <div v-for="(v, k) in formDataValue" :key="k">
+                    {{ field.fields.find((f) => f.model === k).label }}:
+                    {{ v }}
+                  </div>
+                </v-card-text>
+              </v-card>
             </v-card-text>
             <v-card-text>
               <MenuComponent ref="MenuComponent" title="Adicionar endereço">
@@ -130,10 +208,17 @@ export default class FormComponent extends Vue {
       if (!this.formData[field.model]) {
         this.formData[field.model] = [];
       }
-      this.$set(this.formData, field.model, [
-        ...this.formData[field.model],
-        val,
-      ]);
+
+      if (field.key && this.formData[field.model].length > 0) {
+        this.formData[field.model] = _.map(this.formData[field.model], (f) => {
+          if (f[field.key] == val[field.key]) {
+            return val;
+          }
+          return f;
+        });
+      } else {
+        this.formData[field.model] = [...this.formData[field.model], val];
+      }
     } else {
       this.formData[field.model] = val;
     }
@@ -180,14 +265,25 @@ export default class FormComponent extends Vue {
       if (f.type === "form") {
         if (f.multiple) {
           this.formData[f.model] = [];
-          console.log(this.formData);
         }
       }
     });
   }
 
+  addItem(field, _item) {
+    if (!this.formData[field.model]) {
+      this.formData[field.model] = field.id;
+    }
+  }
+
+  removeItem(fieldModel, index) {
+    this.settingParentField = true;
+    this.formData[fieldModel].splice(index, 1);
+    this.settingParentField = false;
+  }
+
   mounted() {
-    this.startMultipleFields;
+    this.startMultipleFields();
   }
 }
 </script>
