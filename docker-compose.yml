@@ -35,6 +35,8 @@ services:
       - TAG=${TAG}
     volumes:
       - ./api/app:/app
+    env_file:
+      - .env
     build:
       context: ./api
       args:
