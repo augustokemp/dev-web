@@ -17,6 +17,7 @@
             :dense="field.dense"
             :key="idx"
             :label="field.label"
+            :disabled="field.disabled"
             :rules="
               required
                 ? [(v) => required(v, field.label), ...(field.rules || [])]
@@ -152,6 +153,7 @@
     </v-card-text>
     <v-card-actions class="mx-2">
       <v-btn
+        :loading="isLoading"
         class="ma-2 ml-0"
         :disabled="!isValid"
         rounded
@@ -160,9 +162,14 @@
         @click="isChild ? onSubmitChild() : onSubmit()"
         >{{ submitLabel }}</v-btn
       >
-      <v-btn @click="resetFields" class="ma-2" rounded small>{{
-        resetLabel
-      }}</v-btn>
+      <v-btn
+        :disabled="isLoading"
+        @click="resetFields"
+        class="ma-2"
+        rounded
+        small
+        >{{ resetLabel }}</v-btn
+      >
     </v-card-actions>
   </v-card>
 </template>
@@ -170,7 +177,7 @@
 <script lang="ts">
 import Component from "vue-class-component";
 import Vue from "vue";
-import { Prop } from "vue-property-decorator";
+import { Prop, Watch } from "vue-property-decorator";
 import AddressCard from "@/components/AddressCard.vue";
 import MenuComponent from "@/components/MenuComponent.vue";
 
@@ -188,6 +195,14 @@ export default class FormComponent extends Vue {
   @Prop({ type: Boolean, default: false }) readonly lazyValidation!: boolean;
   @Prop({ type: Boolean, default: true }) readonly clearOnSubmit!: boolean;
   @Prop({ type: Boolean, default: false }) readonly isChild!: boolean;
+  @Prop({ type: Boolean, default: false }) readonly loading!: boolean;
+
+  isLoading = false;
+
+  @Watch("loading")
+  onChangeLoading(val) {
+    this.isLoading = val;
+  }
 
   onSubmit() {
     this.$emit("submit", this.formData);
