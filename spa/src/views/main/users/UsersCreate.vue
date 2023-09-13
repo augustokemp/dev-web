@@ -33,7 +33,7 @@ export default class UsersCreate extends TemplateCard {
   id: null | number = null;
 
   get fields() {
-    return [
+    const fields = [
       {
         label: "Nome completo",
         model: "full_name",
@@ -164,6 +164,10 @@ export default class UsersCreate extends TemplateCard {
         fields: this.toolFields,
       },
     ];
+    if (this.id) {
+      fields.splice(2, 3);
+    }
+    return fields;
   }
 
   switchMenu(open: boolean) {
@@ -229,12 +233,18 @@ export default class UsersCreate extends TemplateCard {
 
   async onSubmit(val) {
     if (this.id) {
-      await adminStore.updateUser({
+      const { error } = await adminStore.updateUser({
         id: this.id,
         payload: val,
       });
+      if (!error) {
+        this.$router.push("/main/users");
+      }
     } else {
-      await adminStore.createUser(val);
+      const { error } = await adminStore.createUser(val);
+      if (!error) {
+        this.$router.push("/main/users");
+      }
     }
   }
 

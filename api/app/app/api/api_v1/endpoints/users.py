@@ -54,15 +54,13 @@ def read_user(
 @router.put("/{id}/", response_model=schemas.User)
 def update_user(
     id: int,
-    payload: schemas.UserCreateFieldsToReceive,
+    payload: schemas.UserUpdateFieldsToReceive,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Atualiza user, addresses e tools
     """
-
-    db.expire_on_commit = False
 
     # Verifica se current_user tem permissão para criar users
     user_tool = crud.user_tool.get(db=db, user_id=current_user.id, tool_id=1)
@@ -124,8 +122,6 @@ def create_user(
     Cria/Atualiza user_tools
     """
 
-    db.expire_on_commit = False
-
     # Verifica se current_user tem permissão para criar users
     user_tool = crud.user_tool.get(db=db, user_id=current_user.id, tool_id=1)
     if not user_tool or not user_tool.allow_create:
@@ -181,8 +177,6 @@ def delete_user(
     Remove usuário, tools e user_addresses
     """
 
-    db.expire_on_commit = False
-
     user_tool = crud.user_tool.get(db=db, user_id=current_user.id, tool_id=1)
     if not user_tool or not user_tool.allow_delete:
         raise HTTPException(403, "Usuário não autorizado")
@@ -199,5 +193,6 @@ def delete_user(
         db=db, user_id=db_user.id
     )
 
+    db.refresh(db_user)
     crud.user.remove(db=db, id=id)
     return db_user.id

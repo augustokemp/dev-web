@@ -82,6 +82,7 @@ export default class AdminModule extends VuexModule {
         content: "Usuário atualizado com sucesso",
         color: "success",
       });
+      return { error: false };
     } catch (error: any) {
       mainStore.removeNotification(loadingNotification);
       mainStore.addNotification({
@@ -90,6 +91,7 @@ export default class AdminModule extends VuexModule {
         color: "error",
       });
       await mainStore.checkApiError(<any>error);
+      return { error: true };
     }
   }
 
@@ -107,6 +109,7 @@ export default class AdminModule extends VuexModule {
         content: "Usuário criado com sucesso",
         color: "success",
       });
+      return { error: false };
     } catch (error: any) {
       mainStore.removeNotification(loadingNotification);
       mainStore.addNotification({
@@ -115,6 +118,7 @@ export default class AdminModule extends VuexModule {
         color: "error",
       });
       await mainStore.checkApiError(<any>error);
+      return { error: true };
     }
   }
 
@@ -123,9 +127,19 @@ export default class AdminModule extends VuexModule {
     try {
       const response = await api.deleteUser(mainStore.token, id);
       if (response) {
+        mainStore.addNotification({
+          content: "Usuário excluído com sucesso",
+          color: "success",
+        });
         this.setUsers(_.filter(this.users, (u) => u.id !== id));
       }
     } catch (error) {
+      const err: any = error;
+      mainStore.addNotification({
+        content:
+          err.response.data.detail || "Houve um erro ao remover o usuário",
+        color: "error",
+      });
       await mainStore.checkApiError(<any>error);
     }
   }

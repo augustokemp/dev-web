@@ -3,7 +3,7 @@ from typing import List, Optional
 
 from app.schemas.address import Address
 from app.schemas.user_tool import UserTool
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, validator
 
 from app.schemas.address import AddressCreate
 from app.schemas.user_tool import UserToolCreateFieldsToReceive
@@ -24,16 +24,38 @@ class UserCreate(UserBase):
 
     class Config:
         orm_mode = True
-    
+
 
 class UserCreateFieldsToReceive(UserCreate):
     addresses: List[AddressCreate]
     user_tools: List[UserToolCreateFieldsToReceive]
 
+    @validator("addresses", "user_tools", pre=True, each_item=True)
+    def check_min_length(cls, value):
+        if len(value) < 1:
+            raise ValueError("List must have a minimum length of 1")
+        return value
+
+    class Config:
+        orm_mode = True
+
+
+class UserUpdateFieldsToReceive(UserBase):
+    addresses: List[AddressCreate]
+    user_tools: List[UserToolCreateFieldsToReceive]
+
+    @validator("addresses", "user_tools", pre=True, each_item=True)
+    def check_min_length(cls, value):
+        if len(value) < 1:
+            raise ValueError("List must have a minimum length of 1")
+        return value
+
     class Config:
         orm_mode = True
 
 # Properties to receive via API on update
+
+
 class UserUpdate(UserBase):
     password: Optional[str] = None
     email: Optional[EmailStr] = None
