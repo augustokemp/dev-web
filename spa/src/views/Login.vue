@@ -4,6 +4,8 @@
       <v-card-text class="primary--text text-h6"> Login </v-card-text>
       <v-card-text class="text-right">
         <FormComponent
+          dense
+          submitLabel="Entrar"
           :loading="isLoading"
           :key="1"
           flat

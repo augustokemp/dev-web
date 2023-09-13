@@ -3,7 +3,7 @@
     <v-card-title class="primary--text text-subtitle-1" v-if="title">
       {{ title }}
     </v-card-title>
-    <v-card-text>
+    <v-card-text :class="{ 'ma-0 pa-0': dense }">
       <v-form ref="Form" :lazy-validation="lazyValidation" v-model="isValid">
         <template v-for="(field, idx) in fields">
           <v-text-field
@@ -151,7 +151,7 @@
         <slot name="buttons" />
       </v-form>
     </v-card-text>
-    <v-card-actions class="mx-2">
+    <v-card-actions :class="{'ma-0 pa-0 }': dense}" class="mx-2">
       <v-btn
         :loading="isLoading"
         class="ma-2 ml-0"
@@ -196,6 +196,7 @@ export default class FormComponent extends Vue {
   @Prop({ type: Boolean, default: true }) readonly clearOnSubmit!: boolean;
   @Prop({ type: Boolean, default: false }) readonly isChild!: boolean;
   @Prop({ type: Boolean, default: false }) readonly loading!: boolean;
+  @Prop({ type: Boolean, default: false }) readonly dense!: boolean;
 
   isLoading = false;
 
