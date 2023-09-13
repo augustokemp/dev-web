@@ -1,5 +1,5 @@
 import { apiUrl } from "@/env";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import {
   IUserProfile,
   IUserProfileCreate,
@@ -7,14 +7,16 @@ import {
 } from "./interfaces/userProfile";
 import { ITool } from "./interfaces/tool";
 
-function authHeaders(token: string) {
-  return {
+const authHeaders = (token: string, formdata?: boolean) => {
+  const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "multipart/form-data",
+      "Content-Type": !formdata ? "application/json" : "multipart/form-data",
     },
   };
-}
+
+  return config;
+};
 
 const api = {
   async logInGetToken(username: string, password: string) {
@@ -53,11 +55,7 @@ const api = {
     id: number,
     data: IUserProfileUpdate
   ): Promise<IUserProfile> {
-    return axios.post(
-      `${apiUrl}/api/v1/users/${id}/`,
-      data,
-      authHeaders(token)
-    );
+    return axios.put(`${apiUrl}/api/v1/users/${id}/`, data, authHeaders(token));
   },
   async deleteUser(token: string, id: number): Promise<Number> {
     return axios.delete(`${apiUrl}/api/v1/users/${id}/`, authHeaders(token));

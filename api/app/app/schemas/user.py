@@ -21,11 +21,17 @@ class UserBase(BaseModel):
 # Properties to receive via API on creation
 class UserCreate(UserBase):
     password: str
+
+    class Config:
+        orm_mode = True
     
 
 class UserCreateFieldsToReceive(UserCreate):
     addresses: List[AddressCreate]
     user_tools: List[UserToolCreateFieldsToReceive]
+
+    class Config:
+        orm_mode = True
 
 # Properties to receive via API on update
 class UserUpdate(UserBase):
@@ -33,6 +39,9 @@ class UserUpdate(UserBase):
     email: Optional[EmailStr] = None
     is_active: Optional[bool] = True
     full_name: Optional[str] = None
+
+    class Config:
+        orm_mode = True
 
 
 class UserInDBBase(UserBase):

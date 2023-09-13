@@ -30,6 +30,8 @@ import _ from "lodash";
   },
 })
 export default class UsersCreate extends TemplateCard {
+  id: null | number = null;
+
   get fields() {
     return [
       {
@@ -225,21 +227,26 @@ export default class UsersCreate extends TemplateCard {
     return toolStore.tools;
   }
 
-  onSubmit(val) {
-    console.log(val);
+  async onSubmit(val) {
+    if (this.id) {
+      await adminStore.updateUser({
+        id: this.id,
+        payload: val,
+      });
+    } else {
+      await adminStore.createUser(val);
+    }
   }
 
   async mounted() {
     const params = _.get(this.$router.currentRoute, "params", {});
-    const id = _.get(params, "id");
+    this.id = _.toNumber(_.get(params, "id", "0"));
 
-    if (id) {
-      await adminStore.getUser(id);
-      const user = adminStore.user;
-      const form: any = this.$refs.FormComponent;
-      if (form) {
-        form.formData = user;
-      }
+    await adminStore.getUser(this.id);
+    const user = adminStore.user;
+    const form: any = this.$refs.FormComponent;
+    if (form) {
+      form.formData = user;
     }
 
     await toolStore.getTools();
