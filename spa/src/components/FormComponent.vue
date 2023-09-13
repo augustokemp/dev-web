@@ -7,6 +7,8 @@
       <v-form ref="Form" :lazy-validation="lazyValidation" v-model="isValid">
         <template v-for="(field, idx) in fields">
           <v-text-field
+            ref="textField"
+            autocomplete="off"
             v-if="['text', 'password'].includes(field.type)"
             @blur="onBlur(field)"
             v-model="formData[field.model]"
@@ -151,7 +153,7 @@
         <slot name="buttons" />
       </v-form>
     </v-card-text>
-    <v-card-actions :class="{'ma-0 pa-0 }': dense}" class="mx-2">
+    <v-card-actions :class="{ 'ma-0 pa-0 }': dense }" class="mx-2">
       <v-btn
         :loading="isLoading"
         class="ma-2 ml-0"
@@ -197,6 +199,8 @@ export default class FormComponent extends Vue {
   @Prop({ type: Boolean, default: false }) readonly isChild!: boolean;
   @Prop({ type: Boolean, default: false }) readonly loading!: boolean;
   @Prop({ type: Boolean, default: false }) readonly dense!: boolean;
+  @Prop({ type: Boolean, default: true }) readonly autoFocusFirst!: boolean;
+  @Prop({ type: Boolean, default: false }) readonly autoReset!: boolean;
 
   isLoading = false;
 
@@ -314,6 +318,15 @@ export default class FormComponent extends Vue {
 
   mounted() {
     this.startMultipleFields();
+    if (this.autoFocusFirst) {
+      const fields: any = this.$refs.textField;
+      fields[0].focus();
+      if (this.autoReset) {
+        setTimeout(() => {
+          this.resetFields();
+        }, 500);
+      }
+    }
   }
 }
 </script>
