@@ -7,7 +7,12 @@
       :items="users"
       :headers="headers"
     >
-      <template #[`item.addresses`]="{ value, index }">
+      <template #[`item.is_admin`]="{ value }">
+        <span v-if="value">Sim</span>
+        <span v-else>Não</span>
+      </template>
+
+      <template #[`item.addresses`]="{ value }">
         <DataTableComponent
           hide-default-footer
           :headers="headersAddresses"
@@ -78,21 +83,40 @@ export default class UsersList extends TemplateCard {
     { text: "Nome", value: "full_name", align: "center" },
     { text: "E-mail", value: "email", align: "center" },
     { text: "Admin", value: "is_admin", align: "center" },
-    { text: "Endereços", value: "addresses", align: "center" },
+    { text: "Endereços", value: "addresses", align: "center", width: "50%" },
     { text: "Editar", width: 50, value: "edit", align: "center" },
     { text: "Excluir", width: 50, value: "delete", align: "center" },
   ];
 
   headersAddresses = [
-    { text: "Rua", value: "street", align: "center", sortable: false },
+    {
+      text: "Rua",
+      value: "street",
+      align: "center",
+      sortable: false,
+      width: "25%",
+    },
     {
       text: "Número",
       value: "street_number",
       align: "center",
       sortable: false,
+      width: "15%",
     },
-    { text: "Bairro", value: "neighborhood", align: "center", sortable: false },
-    { text: "Cidade", value: "city", align: "center", sortable: false },
+    {
+      text: "Bairro",
+      value: "neighborhood",
+      align: "center",
+      sortable: false,
+      width: "35%",
+    },
+    {
+      text: "Cidade",
+      value: "city",
+      align: "center",
+      sortable: false,
+      width: "25%",
+    },
   ];
 
   isLoading = false;
