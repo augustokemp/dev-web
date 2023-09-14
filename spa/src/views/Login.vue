@@ -22,18 +22,18 @@
         <v-row align="center" dense>
           <v-col class="mx-auto" cols="auto">
             Usuário Inicial:
-            <v-chip @click="clipboardCopy(firstAdmin)" x-small label>
+            <v-chip @click="loginAsAdmin()" x-small label>
               {{ firstAdmin }}
             </v-chip>
             -
-            <v-chip @click="clipboardCopy(firstAdminPassword)" x-small label>
+            <v-chip @click="loginAsAdmin()" x-small label>
               {{ firstAdminPassword }}
             </v-chip>
           </v-col>
         </v-row>
         <v-row align="center" dense>
           <v-col class="mx-auto text-caption" cols="auto">
-            (Clique para copiar)
+            (Clique para logar)
           </v-col>
         </v-row>
       </v-card-text>
@@ -91,29 +91,18 @@ export default class Login extends Vue {
     ];
   }
 
-  clipboardCopy(text: string) {
-    const textarea = document.createElement("textarea");
-    textarea.value = text;
-    textarea.style.position = "fixed";
-    textarea.style.opacity = "0";
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand("copy");
-    document.body.removeChild(textarea);
-    this.$swal({
-      width: "230px",
-      icon: "success",
-      text: "Copiado para área de transferência",
-      timer: 1000,
-      showConfirmButton: false,
-    });
+  loginAsAdmin() {
+    const form: any = this.$refs.FormComponent;
+    form.formData = {
+      username: this.firstAdmin,
+      password: this.firstAdminPassword,
+    };
+    form.onSubmit()
   }
 
   async onSubmit(formData) {
     const { username, password } = formData;
-    // const form: any = this.$refs.FormComponent;
     this.isLoading = true;
-    // form.loading = true;
     setTimeout(async () => {
       await mainStore.logIn({
         username: username,
@@ -121,7 +110,6 @@ export default class Login extends Vue {
       });
       this.isLoading = false;
     }, 1000);
-    // form.loading = false;
   }
 }
 </script>
