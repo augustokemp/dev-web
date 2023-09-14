@@ -21,7 +21,11 @@
       <template #[`item.edit`]="{ item }">
         <v-btn
           :to="`/main/users/create/${item.id}`"
-          :disabled="!userTool.allow_update"
+          :disabled="
+            !userTool.allow_update &&
+            currentUser.id !== item.id &&
+            !currentUser.is_admin
+          "
           icon
         >
           <v-icon>mdi-pencil</v-icon>
@@ -30,7 +34,9 @@
       <template #[`item.delete`]="{ item }">
         <v-btn
           @click="confirmDelete(item)"
-          :disabled="!userTool.allow_delete || item.id === 1"
+          :disabled="
+            (!userTool.allow_delete && !currentUser.is_admin) || item.id === 1
+          "
           icon
         >
           <v-icon>mdi-close</v-icon>
@@ -92,7 +98,7 @@ export default class UsersList extends TemplateCard {
   get userTool() {
     return _.find(
       mainStore.currentUserTools,
-      { id: 1 } || {
+      { tool_id: 1 } || {
         allow_create: false,
         allow_read: false,
         allow_update: false,

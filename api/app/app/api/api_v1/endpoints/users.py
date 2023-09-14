@@ -62,10 +62,12 @@ def update_user(
     Atualiza user, addresses e tools
     """
 
-    # Verifica se current_user tem permissão para criar users
-    user_tool = crud.user_tool.get(db=db, user_id=current_user.id, tool_id=1)
-    if not user_tool or not user_tool.allow_update:
-        raise HTTPException(403, "Usuário não autorizado")
+    if id != current_user.id and not current_user.is_admin:
+        # Verifica se current_user tem permissão para criar users
+        user_tool = crud.user_tool.get(
+            db=db, user_id=current_user.id, tool_id=1)
+        if not user_tool or not user_tool.allow_update:
+            raise HTTPException(403, "Usuário não autorizado")
 
     addresses_ids = []
 
@@ -122,10 +124,12 @@ def create_user(
     Cria/Atualiza user_tools
     """
 
-    # Verifica se current_user tem permissão para criar users
-    user_tool = crud.user_tool.get(db=db, user_id=current_user.id, tool_id=1)
-    if not user_tool or not user_tool.allow_create:
-        raise HTTPException(403, "Usuário não autorizado")
+    if not current_user.is_admin:
+        # Verifica se current_user tem permissão para criar users
+        user_tool = crud.user_tool.get(
+            db=db, user_id=current_user.id, tool_id=1)
+        if not user_tool or not user_tool.allow_create:
+            raise HTTPException(403, "Usuário não autorizado")
 
     addresses_ids = []
 
