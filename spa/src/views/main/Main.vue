@@ -14,14 +14,14 @@
         </template>
 
         <v-list>
-          <v-list-item to="/main/profile">
+          <!-- <v-list-item to="/main/profile">
             <v-list-item-content>
               <v-list-item-title>Meu usuário</v-list-item-title>
             </v-list-item-content>
             <v-list-item-action>
               <v-icon>mdi-account</v-icon>
             </v-list-item-action>
-          </v-list-item>
+          </v-list-item> -->
           <v-list-item @click="logout">
             <v-list-item-content>
               <v-list-item-title>Sair</v-list-item-title>
@@ -51,7 +51,11 @@
       </v-list>
       <v-divider></v-divider>
       <v-list nav dense>
-        <v-list-item :to="tool.tool.path" v-for="tool in currentUserTools" :key="tool.id">
+        <v-list-item
+          :to="tool.tool.path"
+          v-for="tool in currentUserTools"
+          :key="tool.id"
+        >
           <v-list-item-icon>
             <v-icon>{{ tool.tool.icon }}</v-icon>
           </v-list-item-icon>
