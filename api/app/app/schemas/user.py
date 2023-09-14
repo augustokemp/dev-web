@@ -28,9 +28,9 @@ class UserCreate(UserBase):
 
 class UserCreateFieldsToReceive(UserCreate):
     addresses: List[AddressCreate]
-    user_tools: List[UserToolCreateFieldsToReceive]
+    user_tools: Optional[List[UserToolCreateFieldsToReceive]]
 
-    @validator("addresses", "user_tools", pre=True, each_item=True)
+    @validator("addresses", pre=True, each_item=True)
     def check_min_length(cls, value):
         if len(value) < 1:
             raise ValueError("List must have a minimum length of 1")
@@ -42,9 +42,9 @@ class UserCreateFieldsToReceive(UserCreate):
 
 class UserUpdateFieldsToReceive(UserBase):
     addresses: List[AddressCreate]
-    user_tools: List[UserToolCreateFieldsToReceive]
+    user_tools: Optional[List[UserToolCreateFieldsToReceive]]
 
-    @validator("addresses", "user_tools", pre=True, each_item=True)
+    @validator("addresses", pre=True, each_item=True)
     def check_min_length(cls, value):
         if len(value) < 1:
             raise ValueError("List must have a minimum length of 1")
