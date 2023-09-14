@@ -35,7 +35,9 @@
         <v-btn
           @click="confirmDelete(item)"
           :disabled="
-            (!userTool.allow_delete && !currentUser.is_admin) || item.id === 1
+            (!userTool.allow_delete && !currentUser.is_admin) ||
+            item.is_admin ||
+            item.id === currentUser.id
           "
           icon
         >
@@ -46,7 +48,7 @@
 
     <template #actions>
       <v-btn
-        :disabled="!userTool.allow_create"
+        :disabled="!userTool.allow_create && !currentUser.is_admin"
         to="/main/users/create"
         small
         rounded
