@@ -157,7 +157,7 @@
       <v-btn
         :loading="isLoading"
         class="ma-2 ml-0"
-        :disabled="!isValid"
+        :disabled="!isValid || !subForms"
         rounded
         small
         color="primary"
@@ -248,6 +248,16 @@ export default class FormComponent extends Vue {
   isValid = false;
   formData: any = {};
   settingParentField = false;
+
+  get subForms() {
+    const formFields = _.filter(this.fields, { type: "form", required: true });
+    return _.every(formFields, (f) => {
+      if (f.multiple) {
+        return this.formData[f.model] && this.formData[f.model].length > 0;
+      }
+      return this.formData[f.model];
+    });
+  }
 
   get customRules() {
     return _.every(_.flatMap(this.customFields, "rules"));

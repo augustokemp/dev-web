@@ -95,6 +95,7 @@ export default class UsersCreate extends TemplateCard {
         label: "Endereço(s)",
         model: "addresses",
         type: "form",
+        required: true,
         multiple: true,
         submitLabel: "Adicionar endereço",
         flat: true,
