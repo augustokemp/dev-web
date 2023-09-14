@@ -5,8 +5,6 @@ from typing import Any, Dict, List, Optional, Union
 from pydantic import (AnyHttpUrl, BaseSettings, EmailStr, Field, HttpUrl,
                       PostgresDsn, validator)
 
-# on_knn_network = my_ip.split('.')[0] == "10"
-
 
 class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
@@ -19,6 +17,7 @@ class Settings(BaseSettings):
 
     class Config:
         case_sensitive = True
+
 
         # env_file = os.path.expanduser('.env')
 settings = Settings()
