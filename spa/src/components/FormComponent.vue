@@ -162,7 +162,7 @@
         small
         color="primary"
         @click="isChild ? onSubmitChild() : onSubmit()"
-        >Salvar</v-btn
+        > {{ submitLabel }} </v-btn
       >
       <v-btn
         :disabled="isLoading"

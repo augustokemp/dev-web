@@ -7,7 +7,7 @@
           :class="{ loginForm: isLoading }"
           class="rounded-lg pa-2"
           dense
-          submitLabel="Entrar"
+          submitLabel="Login"
           :loading="isLoading"
           :key="1"
           flat
