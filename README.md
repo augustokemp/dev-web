@@ -1,6 +1,21 @@
 
 Project developed for the Evaluation of Extraordinary Knowledge in the Web Development II course, taken at the Federal Institute of Santa Catarina under the guidance of Professor Daniel Varela
 
+### Screens
+
+#### Login Screen
+![Captura de tela de 2023-09-15 20-22-32](https://github.com/augustokemp/dev-web/assets/80912604/c0808682-61f8-43a5-88e7-d2b63c97a2a9)
+
+#### Home Screen
+![Captura de tela de 2023-09-15 20-22-38](https://github.com/augustokemp/dev-web/assets/80912604/ef424728-f7cd-43da-afd2-e2995115824d)
+
+#### Users Screen
+![Captura de tela de 2023-09-15 20-22-40](https://github.com/augustokemp/dev-web/assets/80912604/fb7d5a57-53a0-4274-b9eb-5e685c683e9e)
+
+
+#### Create/Update user form
+![Captura de tela de 2023-09-15 20-22-50](https://github.com/augustokemp/dev-web/assets/80912604/0773d0d0-0363-44b2-8004-ddd676cf0f75)
+
 ### Goals
 
 ```
@@ -41,6 +56,15 @@ Backend:
 - PostgreSQL (SQL DB)
 - SQLAlchemy (Python SQL ORM)
 - Pydantic (Data Validation Library)
+
+Other libraries & tools:
+- Docker;
+- Date-fns;
+- SweetAlert2;
+- MD Fonts & Icons;
+- Hashids;
+- Starlette;
+- & More.
 ```
 
 ### Requirements:
