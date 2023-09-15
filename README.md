@@ -1,37 +1,30 @@
-# Extraordinario Aproveitamento: BSI21 Desenvolvimento Web 2
+
+Project developed for the Evaluation of Extraordinary Knowledge in the Web Development II course, taken at the Federal Institute of Santa Catarina under the guidance of Professor Daniel Varela
+
+### Goals
 
 ```
-## Ementa
+Develop a user registration system with the following features:
 
-O desenvolvimento de aplicações web com utilização de frameworks e banco de dados. Linguagens e ambientes de concepção de projeto de sistemas na web. Inovações de projeto e utilização de ferramentas avançadas.
+The registration must include the following fields:
+- Full name
+- Email
+- Password
+- Address (allowing the registration of one or more addresses if necessary)
 
-## Objeto avaliativo de extraordiunário aproveitamento
+The system should allow any registered and logged-in user to view their own data and the data of others.
+Changes to information can only be allowed by the user who owns the data and/or by a user who has permission for this type of alteration.
+For creating new users, only a user with this permission can do so.
+The frontend should preferably be developed using React and should include the following screens:
 
-Desenvolva um cadastro de usuários com as seguintes características:
-- O cadastro deve conter os seguintes campos,
-  - nome completo
-  - email
-  - senha
-  - endereço (sendo necessário permitir cadastro de um ou mais endereços)
-- O sistema deve permitir que qualquer usuário cadastrado e logado possa ver os seu dados dados e dos demais
-- Alterações de informações só podem ser permitidas pelo usuário dono dos dados e/ou por um usuário que tenha permissão para este tipo de alteração
-- Para criação de novos usuários, somente um usuário com esta permissão poderá fazê-lo
-
-O frontend deve preferencialmente ser desenvolvido utilizando  React e deve conter as seguintes telas:
-- Tela de login
-- Tela de lista geral dados de usuários (paginada e com campo de pesquisa/filtro)
-- Tela de criação/alteração de novo usuário
-
-O backend deve preferencialmente ser preferencialmente uma API Rest ou GraphQL utilizando preferencialmente NodeJS (express), MySQL/MariaDB.
+Login screen
+General user data list screen (paginated with a search/filter field)
+New user creation/modification screen
+The backend should preferably be an API, either Rest or GraphQL, preferably using Node.js (Express), and MySQL/MariaDB.
 ```
 
-```
-Projeto desenvolvido para Avialiação do Extraordinário Saber
-da disciplina de Desenvolvimento Web II, cursada no Instituto
-Federal Catarinense sob a direção do professor Daniel Varela.
-```
 
-### Linguagens & Frameworks
+### Languages & Frameworks
 
 ```
 Frontend:
@@ -50,13 +43,13 @@ Backend:
 - Pydantic (Data Validation Library)
 ```
 
-### Requerimentos:
+### Requirements:
 
 ```
 docker & docker-compose
 ```
 
-## Inicialização
+## Initialization
 
 ```
 1. cd dev-web
