@@ -7,7 +7,7 @@
       ref="FormComponent"
       @submit="onSubmit"
       title="Dados do Usuário"
-      submitLabel="Adicionar usuário"
+      submitLabel="Salvar"
       :fields="fields"
     />
     <template #actions>

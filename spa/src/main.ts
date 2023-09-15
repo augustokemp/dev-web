@@ -42,7 +42,7 @@ Vue.mixin({
     emailTest: (v: string) =>
       RegExp(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/).test(v),
     fullNameTest: (v: string) =>
-      RegExp(/^[A-Za-z\s'-]+ [A-Za-z\s'-]+$/).test(v),
+      RegExp(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+ [A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/).test(v),
   },
   // computed: {
   //   required: () => [(v) => !!v || "Campo obrigatório"],
